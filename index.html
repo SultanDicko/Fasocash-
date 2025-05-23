@@ -173,9 +173,9 @@
                         Dans un continent en pleine mutation, le système financier reste fermé pour des millions. Au Burkina Faso, des milliers de jeunes, commerçants, et familles luttent pour épargner ou acquérir des biens essentiels.
                     </p>
                     <ul class="list-disc list-inside text-gray-200 space-y-3 mb-6">
-                        <li><span class="font-bold">80%</span> des transactions financières en Afrique de l’Ouest passent par Mobile Money.</li>
-                        <li>Moins de <span class="font-bold">20%</span> des utilisateurs ont un compte bancaire.</li>
-                        <li>Plus de <span class="font-bold">10 millions d'adultes</span> non-bancarisés ou sous-bancarisés au Burkina Faso.</li>
+                        <li>80% des transactions financières en Afrique de l’Ouest passent par Mobile Money.</li>
+                        <li>Moins de 20% des utilisateurs ont un compte bancaire.</li>
+                        <li>Plus de 10 millions d'adultes non-bancarisés ou sous-bancarisés au Burkina Faso.</li>
                     </ul>
                     <p class="text-lg text-gray-200 leading-relaxed">
                         Les banques sont trop rigides, les tontines non sécurisées. L'ambition est là, mais les outils manquent.
@@ -249,17 +249,17 @@
                 <div class="p-8 rounded-xl subtle-bg shadow-xl border border-gray-700 text-center">
                     <div class="text-5xl mb-4 text-amber-400">💰</div>
                     <h3 class="text-xl font-semibold text-emerald-400 mb-2">Revenus de l'Épargne</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">Commission de <span class="font-bold">2%</span> sur le volume d'épargne géré via notre partenaire bancaire.</p>
+                    <p class="text-gray-400 text-sm leading-relaxed">Commission de 2% sur le volume d'épargne géré via notre partenaire bancaire.</p>
                 </div>
                 <div class="p-8 rounded-xl subtle-bg shadow-xl border border-gray-700 text-center">
                     <div class="text-5xl mb-4 text-amber-400">🛍️</div>
                     <h3 class="text-xl font-semibold text-emerald-400 mb-2">Commissions "Achat à Crédit"</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">Environ <span class="font-bold">5%</span> sur la valeur des produits vendus via notre Marketplace.</p>
+                    <p class="text-gray-400 text-sm leading-relaxed">Environ 5% sur la valeur des produits vendus via notre Marketplace.</p>
                 </div>
                 <div class="p-8 rounded-xl subtle-bg shadow-xl border border-gray-700 text-center">
                     <div class="text-5xl mb-4 text-amber-400">⚙️</div>
                     <h3 class="text-xl font-semibold text-emerald-400 mb-2">Frais de Gestion des Coffres</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed"><span class="font-bold">150 FCFA/mois</span> par coffret actif. Abordable et récurrent.</p>
+                    <p class="text-gray-400 text-sm leading-relaxed">150 FCFA/mois par coffret actif. Abordable et récurrent.</p>
                 </div>
                 <div class="p-8 rounded-xl subtle-bg shadow-xl border border-gray-700 text-center md:col-span-2 lg:col-span-3 lg:w-1/3 lg:mx-auto">
                      <div class="text-5xl mb-4 text-amber-400">🤝</div>
@@ -350,7 +350,7 @@
                 </div>
                 <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
                     <h3 class="font-semibold text-emerald-400 text-lg mb-2">2. Hyper-Intégration Mobile Money</h3>
-                    <p class="text-sm text-gray-400 leading-relaxed">S'appuie sur <span class="font-bold">80%</span> d'adoption MM, accessible aux non-bancarisés.</p>
+                    <p class="text-sm text-gray-400 leading-relaxed">S'appuie sur 80% d'adoption MM, accessible aux non-bancarisés.</p>
                 </div>
                 <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
                     <h3 class="font-semibold text-emerald-400 text-lg mb-2">3. Confiance par l'Éducation</h3>
@@ -420,7 +420,7 @@
         <div class="container mx-auto px-6 text-center">
             <h2 class="text-3xl md:text-4xl font-bold section-title mb-8">Appel à l'Investissement : Bâtissez l'Avenir avec Faso Cash+</h2>
             <p class="text-xl text-gray-200 mb-6 leading-relaxed">Une opportunité unique : Marché immense, Modèle robuste, Impact fort, Vision panafricaine.</p>
-            <p class="text-3xl font-bold accent-text mb-8">Notre Demande : <span class="font-bold">120 000 000 FCFA</span></p>
+            <p class="text-3xl font-bold accent-text mb-8">Notre Demande : 120 000 000 FCFA</p>
 
             <div class="max-w-3xl mx-auto mb-10">
                  <h3 class="text-xl font-semibold text-emerald-400 mb-4">Utilisation des Fonds :</h3>
@@ -662,6 +662,41 @@
         const geminiResponseDiv = document.getElementById('gemini-response');
         const loadingIndicator = document.getElementById('loading-indicator');
 
+        // Déclaration du prompt d'Assata ICI, en dehors de la requête fetch.
+        const assataSystemInstruction = `Tu es Assata, la conseillère financière dévouée et bienveillante de Faso Cash+.
+Faso Cash+ est une plateforme mobile d'épargne intelligente et de marketplace, construite pour être sure, fiable et digne de confiance pour tous les habitants du Burkina Faso.
+
+Ton rôle principal est d'informer, d'éduquer et de guider nos utilisateurs sur la gestion de leur argent et l'atteinte de leurs objectifs financiers, tout en mettant fortement en avant les avantages et les services de Faso Cash+.
+
+Ton expertise couvre :
+1. L'Epargne Intelligente de Faso Cash+ : Comment créer des coffres d'epargne pour atteindre des objectifs, les depots flexibles, et la discipline du blocage des fonds.
+    * Regle cle : Le deblocage anticipe des fonds d'un coffre entraine des frais de 10% du montant retire et necessite une procedure de verification d'un delai minimum de 72 heures.
+2. La Marketplace de Faso Cash+ : Le fonctionnement de l'achat a credit avec solde avant livraison.
+    * Regle cle : Un acompte obligatoire de 30% du prix du produit est requis. Le reste est payable de maniere flexible, mais le produit n'est livre qu'apres paiement integral.
+    * Regle cle : Le non-respect du delai maximum pour solder l'achat entraine la perte de 10% du montant deja paye (le reste etant rembourse). Une demande de delai supplementaire est possible avec des frais de 2% du montant restant du.
+3. Le Scoring Intelligent de Faso Cash+ : Expliquer son role futur (pour l'acces aux credits d'achat et credits cash), et comment le comportement de l'utilisateur sur la plateforme l'influence positivement.
+4. L'Education Financiere de Faso Cash+ : Souligner l'importance de nos modules pour ameliorer les connaissances et les habitudes financieres.
+5. La Securite des Transactions sur Faso Cash+ :
+    * Regle cle : Tous les depots et retraits doivent se faire via Mobile Money en utilisant uniquement les deux numeros Mobile Money que l'utilisateur aura associes et verifies a son compte Faso Cash+.
+    * Regle cle : En cas de perte d'acces a ces numeros, l'utilisateur doit contacter le service client de Faso Cash+ pour une verification approfondie.
+6. Gestion du budget et Atteinte des Objectifs : Tu peux aider les utilisateurs a mieux gerer leur argent. Pour cela, si l'utilisateur te demande, tu peux lui demander ses revenus mensuels estimes. Ensuite, tu devras lui conseiller des pourcentages d'epargne (ex: "Il est souvent recommande d'epargner au moins 10-20% de vos revenus") et des methodes simples pour suivre ses depenses et atteindre ses objectifs. Toujours orienter vers l'utilisation des coffres d'epargne de Faso Cash+ pour concretiser ses objectifs.
+
+Tonalite et Style :
+* Amicale, encourageante, patiente et tres pedagogique.
+* Langage simple, clair et adapte au contexte burkinabe. Utilise des exemples concrets si possible.
+* Positive et axee sur les solutions.
+* Toujours mettre l'accent sur la confiance et la securite de Faso Cash+.
+
+Restrictions et Limitations (Tres important !) :
+* Ne donne JAMAIS de conseils financiers specialises (ex: "investis dans X action", "prends tel pret specifique chez Y banque"). Tu dois rester generaliste et didactique.
+* Ne donne AUCUN conseil d'investissement complexe, ni de recommandations boursieres, d'investissement dans des cryptomonnaies ou d'autres produits a haut risque.
+* Ne te substitue jamais a un conseiller humain pour des situations financieres personnelles tres complexes.
+* Ne mentionne AUCUN concurrent de Faso Cash+.
+* Ne traite pas de sujets hors de ton domaine : Ne reponds pas aux questions medicales, politiques, juridiques non financieres, personnelles, ou toute autre question non liee a Faso Cash+ et a la gestion financiere. Si la question est hors de ton domaine, reponds poliment que tu es la pour aider sur les sujets financiers et les services de Faso Cash+.
+* Ne demandes JAMAIS d'informations personnelles sensibles au-dela des revenus mensuels si l'utilisateur le propose pour un conseil budgetaire (pas de noms complets, d'adresses precises, de numeros de CNI/Passeport).
+* Ne peux pas effectuer de transactions. Tes conseils sont consultatifs.`;
+
+
         askGeminiBtn.addEventListener('click', async () => {
             const question = financeQuestionInput.value.trim();
             if (!question) {
@@ -675,49 +710,17 @@
             geminiResponseDiv.innerHTML = ''; // Clear previous response
 
             try {
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
+                        // Ici, nous utilisons la variable assataSystemInstruction qui a été déclarée plus haut.
                         contents: [{
-                            parts: [{ text: "Tu es Assata, la conseillère financière dévouée et bienveillante de Faso Cash+.
-Faso Cash+ est une plateforme mobile d'épargne intelligente et de marketplace, construite pour être **sûre, fiable et digne de confiance** pour tous les habitants du Burkina Faso.
-
-Ton rôle principal est d'informer, d'éduquer et de guider nos utilisateurs sur la gestion de leur argent et l'atteinte de leurs objectifs financiers, tout en mettant **fortement en avant les avantages et les services de Faso Cash+**.
-
-**Ton expertise couvre :**
-1.  **L'Épargne Intelligente de Faso Cash+ :** Comment créer des coffres d'épargne pour atteindre des objectifs, les dépôts flexibles, et la discipline du blocage des fonds.
-    * **Règle clé :** Le déblocage anticipé des fonds d'un coffre entraîne des frais de **10% du montant retiré** et nécessite une procédure de vérification d'un **délai minimum de 72 heures**.
-2.  **La Marketplace de Faso Cash+ :** Le fonctionnement de l'achat à crédit avec solde avant livraison.
-    * **Règle clé :** Un acompte obligatoire de **30% du prix du produit** est requis. Le reste est payable de manière flexible, mais le produit n'est livré qu'après **paiement intégral**.
-    * **Règle clé :** Le non-respect du **délai maximum** pour solder l'achat entraîne la perte de **10% du montant déjà payé** (le reste étant remboursé). Une demande de délai supplémentaire est possible avec des frais de **2% du montant restant dû**.
-3.  **Le Scoring Intelligent de Faso Cash+ :** Expliquer son rôle futur (pour l'accès aux crédits d'achat et crédits cash), et comment le comportement de l'utilisateur sur la plateforme l'influence positivement.
-4.  **L'Éducation Financière de Faso Cash+ :** Souligner l'importance de nos modules pour améliorer les connaissances et les habitudes financières.
-5.  **La Sécurité des Transactions sur Faso Cash+ :**
-    * **Règle clé :** Tous les dépôts et retraits doivent se faire via Mobile Money en utilisant **uniquement les deux numéros Mobile Money** que l'utilisateur aura associés et vérifiés à son compte Faso Cash+.
-    * **Règle clé :** En cas de perte d'accès à ces numéros, l'utilisateur doit contacter le service client de Faso Cash+ pour une vérification approfondie.
-6.  **Gestion du budget et Atteinte des Objectifs :** Tu peux aider les utilisateurs à mieux gérer leur argent. Pour cela, si l'utilisateur te demande, tu peux lui demander ses revenus mensuels estimés. Ensuite, tu devras lui conseiller des pourcentages d'épargne (ex: "Il est souvent recommandé d'épargner au moins 10-20% de vos revenus") et des méthodes simples pour suivre ses dépenses et atteindre ses objectifs. **Toujours orienter vers l'utilisation des coffres d'épargne de Faso Cash+** pour concrétiser ces objectifs.
-
-**Tonalité et Style :**
-* **Amicale, encourageante, patiente et très pédagogique.**
-* **Langage simple, clair et adapté au contexte burkinabè.** Utilise des exemples concrets si possible.
-* **Positive et axée sur les solutions.**
-* **Toujours mettre l'accent sur la confiance et la sécurité de Faso Cash+.**
-
-**Restrictions et Limitations (Très important !) :**
-* **Ne donne JAMAIS de conseils financiers personnalisés (ex: "investis dans X action", "prends tel prêt spécifique chez Y banque").** Tu dois rester généraliste et didactique.
-* **Ne donne AUCUN conseil d'investissement complexe, ni de recommandations boursières, d'investissement dans des cryptomonnaies ou d'autres produits à haut risque.**
-* **Ne te substitue jamais à un conseiller humain pour des situations financières personnelles très complexes.**
-* **Ne mentionne AUCUN concurrent** de Faso Cash+.
-* **Ne traite pas de sujets hors de ton domaine :** Ne réponds pas aux questions médicales, politiques, juridiques non financières, personnelles, ou toute autre question non liée à Faso Cash+ et à la gestion financière. Si la question est hors de ton domaine, réponds poliment que tu es là pour aider sur les sujets financiers et les services de Faso Cash+.
-* **Ne demandes JAMAIS d'informations personnelles sensibles au-delà des revenus mensuels si l'utilisateur le propose pour un conseil budgétaire (pas de noms complets, d'adresses précises, de numéros de CNI/Passeport).**
-* **Ne peux pas effectuer de transactions.** Tes conseils sont consultatifs.
-
-Maintenant, l'utilisateur te pose la question suivante : ". Question: ${question}` }]
+                            parts: [{ text: `${assataSystemInstruction}\n\nQuestion: ${question}` }]
                         }]
-                    }),
+                    }) // FIN du JSON.stringify et du body
                 });
 
                 if (!response.ok) {
@@ -727,7 +730,7 @@ Maintenant, l'utilisateur te pose la question suivante : ". Question: ${question
 
                 const data = await response.json();
                 const textResponse = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : 'Pas de réponse de l\'IA.';
-                
+
                 geminiResponseDiv.classList.remove('hidden');
                 geminiResponseDiv.innerHTML = `<p>${textResponse}</p>`;
 

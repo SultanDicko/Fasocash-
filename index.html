@@ -483,7 +483,7 @@
             const div = document.createElement('div');
             div.className = 'flex items-start p-3 bg-gray-800 rounded-md shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer tooltip-trigger'; /* Adjusted bg for dark theme */
             div.innerHTML = `
-                <span class="text-2xl mr-3"><span class="math-inline">\{douleur\.icon\}</span\>
+               <span class="text-2xl mr-3">${douleur.icon}</span>
 <p class="text-gray-200 text-sm">{douleur.text}</p>
 <span class="tooltip">Cliquez pour en savoir plus (fonctionnalité future)</span>
 ; // Basic interaction example: log to console on click div.addEventListener('click', () => { console.log('Clicked on douleur:', douleur.text); // For now, a simple message box const messageBox = document.createElement('div'); messageBox.style.position = 'fixed'; messageBox.style.top = '50%'; messageBox.style.left = '50%'; messageBox.style.transform = 'translate(-50%, -50%)'; messageBox.style.backgroundColor = '#282828'; /* Dark theme modal background */ messageBox.style.color = '#E5E7EB'; /* Dark theme text */ messageBox.style.padding = '20px'; messageBox.style.border = '1px solid #4B5563'; /* Dark theme border */ messageBox.style.borderRadius = '8px'; messageBox.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)'; messageBox.style.zIndex = '1000'; messageBox.innerHTML =<p class="text-gray-200">${douleur.text}</p><button onclick="this.parentElement.remove()" class="mt-4 bg-amber-400 text-white px-3 py-1 rounded-md hover:bg-amber-500">Fermer</button>`; /* Dark theme button */
@@ -738,7 +738,7 @@ douleursContainer.appendChild(div);
                 let chatHistory = [];
                 chatHistory.push({ role: "user", parts: [{ text: `En tant que conseiller financier pour l'application Faso Cash+, expliquez de manière simple et concise le concept suivant en français, en évitant le jargon technique et en vous concentrant sur son utilité pour un utilisateur en Afrique de l'Ouest : ${prompt}` }] });
                 const payload = { contents: chatHistory };
-                const apiKey = ""; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
+                const apiKey = "AIzaSyA3a0NuQoiA1FLH7hU1eSM-2G7wp5HUHuA"; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {

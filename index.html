@@ -481,179 +481,155 @@
         const douleursContainer = document.getElementById('douleurs-container');
         douleursData.forEach(douleur => {
             const div = document.createElement('div');
-            div.className = 'flex items-start p-3 bg-gray-800 rounded-md shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer tooltip-trigger'; /* Adjusted bg for dark theme */
+            div.className = 'flex items-start p-3 bg-gray-800 rounded-md shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer tooltip-trigger';
             div.innerHTML = `
-               <span class="text-2xl mr-3">${douleur.icon}</span>
-<p class="text-gray-200 text-sm">{douleur.text}</p>
-<span class="tooltip">Cliquez pour en savoir plus (fonctionnalité future)</span>
-; // Basic interaction example: log to console on click div.addEventListener('click', () => { console.log('Clicked on douleur:', douleur.text); // For now, a simple message box const messageBox = document.createElement('div'); messageBox.style.position = 'fixed'; messageBox.style.top = '50%'; messageBox.style.left = '50%'; messageBox.style.transform = 'translate(-50%, -50%)'; messageBox.style.backgroundColor = '#282828'; /* Dark theme modal background */ messageBox.style.color = '#E5E7EB'; /* Dark theme text */ messageBox.style.padding = '20px'; messageBox.style.border = '1px solid #4B5563'; /* Dark theme border */ messageBox.style.borderRadius = '8px'; messageBox.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)'; messageBox.style.zIndex = '1000'; messageBox.innerHTML =<p class="text-gray-200">${douleur.text}</p><button onclick="this.parentElement.remove()" class="mt-4 bg-amber-400 text-white px-3 py-1 rounded-md hover:bg-amber-500">Fermer</button>`; /* Dark theme button */
-document.body.appendChild(messageBox);
-});
-douleursContainer.appendChild(div);
-});
-
-        // Chart.js: Revenue & Profit Chart
-        const revenueProfitCtx = document.getElementById('revenueProfitChart').getContext('2d');
-        new Chart(revenueProfitCtx, {
+                <span class="text-2xl mr-3">${douleur.icon}</span>
+                <p class="text-gray-200 text-sm">${douleur.text}</p>
+                <span class="tooltip">Cliquez pour en savoir plus (fonctionnalité future)</span>
+            `;
+            // Basic interaction example: log to console on click
+            div.addEventListener('click', () => {
+                console.log('Clicked on douleur:', douleur.text);
+                // For now, a simple message box
+                const messageBox = document.createElement('div');
+                messageBox.style.position = 'fixed';
+                messageBox.style.top = '50%';
+                messageBox.style.left = '50%';
+                messageBox.style.transform = 'translate(-50%, -50%)';
+                messageBox.style.backgroundColor = '#282828';
+                messageBox.style.color = '#E5E7EB';
+                messageBox.style.padding = '20px';
+                messageBox.style.border = '1px solid #4B5563';
+                messageBox.style.borderRadius = '8px';
+                messageBox.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)';
+                messageBox.style.zIndex = '1000';
+                messageBox.innerHTML = `<p class="text-gray-200">${douleur.text}</p><button onclick="this.parentElement.remove()" class="mt-4 bg-amber-400 text-white px-3 py-1 rounded-md hover:bg-amber-500">Fermer</button>`;
+                document.body.appendChild(messageBox);
+            });
+            douleursContainer.appendChild(div);
+        });
+         // Charts Initialization
+        // Revenue & Profit Chart
+        const ctxRevenueProfit = document.getElementById('revenueProfitChart').getContext('2d');
+        new Chart(ctxRevenueProfit, {
             type: 'bar',
             data: {
-                labels: ['Revenus Projetés (Année 1)', 'Coûts Opérationnels (Année 1)', 'Bénéfice Net Projeté (Année 1)'],
+                labels: ['Revenus Projetés', 'Bénéfice Net Projeté'],
                 datasets: [{
                     label: 'Montant (FCFA)',
-                    data: [248000000, 120000000, 128000000], // Using lower end of profit for visual
-                    backgroundColor: [
-                        'rgba(52, 211, 153, 0.7)', /* emerald-400 */
-                        'rgba(251, 191, 36, 0.7)', /* amber-400 */
-                        'rgba(16, 185, 129, 0.7)'  /* emerald-500 */
-                    ],
-                    borderColor: [
-                        'rgba(52, 211, 153, 1)',
-                        'rgba(251, 191, 36, 1)',
-                        'rgba(16, 185, 129, 1)'
-                    ],
+                    data: [800000000, 140000000], // Example data: 800M Revenue, 140M Profit
+                    backgroundColor: ['#34D399', '#FBBF24'], // emerald-400, amber-400
+                    borderColor: ['#10B981', '#F59E0B'],
                     borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Projections Financières Année 1',
+                        color: '#E5E7EB', // Text color
+                        font: { size: 16 }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
                         ticks: {
+                            color: '#9CA3AF', // Gray text for ticks
                             callback: function(value) {
-                                return (value / 1000000) + 'M FCFA';
-                            },
-                            color: '#E5E7EB' /* gray-200 */
+                                return value / 1000000 + 'M FCFA'; // Format as millions
+                            }
                         },
                         grid: {
-                            color: 'rgba(75, 85, 99, 0.3)' /* gray-600 with transparency */
+                            color: '#374151', // Darker grid lines
+                            drawBorder: false
                         }
                     },
                     x: {
                         ticks: {
-                            color: '#E5E7EB' /* gray-200 */
+                            color: '#9CA3AF' // Gray text for ticks
                         },
                         grid: {
-                            color: 'rgba(75, 85, 99, 0.3)' /* gray-600 with transparency */
-                        }
-                    }
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Rentabilité Année 1 (FCFA)',
-                        font: { size: 16, color: '#E5E7EB' } /* gray-200 */
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    label += new Intl.NumberFormat('fr-FR').format(context.parsed.y) + ' FCFA';
-                                }
-                                return label;
-                            }
-                        }
-                    },
-                    legend: {
-                        labels: {
-                            color: '#E5E7EB' /* gray-200 */
+                            color: '#374151',
+                            drawBorder: false
                         }
                     }
                 }
             }
         });
 
-        // Chart.js: User Growth Chart (Simplified Line Chart)
-        const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
-        new Chart(userGrowthCtx, {
+        // User Growth Chart
+        const ctxUserGrowth = document.getElementById('userGrowthChart').getContext('2d');
+        new Chart(ctxUserGrowth, {
             type: 'line',
             data: {
-                labels: ['Début Année 1', 'Milieu Année 1', 'Fin Année 1 (Objectif Bas)', 'Fin Année 1 (Objectif Haut)'],
+                labels: ['Mois 1', 'Mois 3', 'Mois 6', 'Mois 9', 'Mois 12'],
                 datasets: [{
                     label: 'Utilisateurs Actifs',
-                    data: [0, 75000, 100000, 200000], // Simplified growth path
-                    borderColor: 'rgba(2, 132, 199, 0.8)', /* sky-600 */
-                    backgroundColor: 'rgba(2, 132, 199, 0.1)',
-                    fill: true,
-                    tension: 0.1
+                    data: [10000, 50000, 100000, 150000, 200000], // Example data
+                    borderColor: '#FBBF24', // amber-400
+                    backgroundColor: 'rgba(251, 191, 36, 0.2)', // Light amber fill
+                    tension: 0.4,
+                    fill: true
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return (value / 1000) + 'k';
-                            },
-                            color: '#E5E7EB' /* gray-200 */
-                        },
-                        grid: {
-                            color: 'rgba(75, 85, 99, 0.3)' /* gray-600 with transparency */
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            color: '#E5E7EB' /* gray-200 */
-                        },
-                        grid: {
-                            color: 'rgba(75, 85, 99, 0.3)' /* gray-600 with transparency */
-                        }
-                    }
-                },
                 plugins: {
                     title: {
                         display: true,
                         text: 'Croissance des Utilisateurs (Année 1)',
-                        font: { size: 16, color: '#E5E7EB' } /* gray-200 */
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    label += new Intl.NumberFormat('fr-FR').format(context.parsed.y) + ' utilisateurs';
-                                }
-                                return label;
-                            }
-                        }
+                        color: '#E5E7EB',
+                        font: { size: 16 }
                     },
                     legend: {
-                        labels: {
-                            color: '#E5E7EB' /* gray-200 */
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#9CA3AF',
+                            callback: function(value) {
+                                return value / 1000 + 'K'; // Format as thousands
+                            }
+                        },
+                        grid: {
+                            color: '#374151',
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#9CA3AF'
+                        },
+                        grid: {
+                            color: '#374151',
+                            drawBorder: false
                         }
                     }
                 }
             }
         });
 
-        // Chart.js: Use of Funds Chart (Doughnut Chart)
-        const fundsCtx = document.getElementById('fundsChart').getContext('2d');
-        new Chart(fundsCtx, {
+        // Funds Allocation Chart
+        const ctxFunds = document.getElementById('fundsChart').getContext('2d');
+        new Chart(ctxFunds, {
             type: 'doughnut',
             data: {
-                labels: ['Développement Tech (35M)', 'Marketing (30M)', 'Opérations & Support (10M)', 'Structure & Admin (21M)', 'Fonds de Roulement (24M)'],
+                labels: ['Développement Tech', 'Acquisition & Marketing', 'Opérations & Support', 'Structure & Imprévus', 'Fonds de Roulement'],
                 datasets: [{
-                    label: 'Utilisation des Fonds (FCFA)',
-                    data: [35000000, 30000000, 10000000, 21000000, 24000000],
-                    backgroundColor: [
-                        'rgba(52, 211, 153, 0.7)',    /* emerald-400 */
-                        'rgba(2, 132, 199, 0.7)',   /* sky-600 */
-                        'rgba(251, 191, 36, 0.7)',  /* amber-400 */
-                        'rgba(107, 114, 128, 0.7)', /* gray-500 */
-                        'rgba(16, 185, 129, 0.7)'   /* emerald-500 */
-                    ],
-                    hoverOffset: 4
+                    data: [35, 30, 15, 21, 24], // Data in millions FCFA
+                    backgroundColor: ['#34D399', '#FBBF24', '#EF4444', '#60A5FA', '#A78BFA'], // emerald, amber, red, blue, violet
+                    hoverOffset: 8
                 }]
             },
             options: {
@@ -662,71 +638,33 @@ douleursContainer.appendChild(div);
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Répartition de l\'Investissement (120M FCFA)',
-                        font: { size: 16, color: '#E5E7EB' } /* gray-200 */
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed !== null) {
-                                     label += new Intl.NumberFormat('fr-FR').format(context.parsed) + ' FCFA (' + ((context.parsed / 120000000) * 100).toFixed(1) + '%)';
-                                }
-                                return label;
-                            }
-                        }
+                        text: 'Utilisation des Fonds Demandés (120M FCFA)',
+                        color: '#E5E7EB',
+                        font: { size: 16 }
                     },
                     legend: {
-                        position: 'bottom',
                         labels: {
-                            color: '#E5E7EB', /* gray-200 */
-                            font: { size: 10 },
-                            padding: 10,
-                            // Custom label generation to shorten long labels
-                            generateLabels: function(chart) {
-                                const data = chart.data;
-                                if (data.labels.length && data.datasets.length) {
-                                    return data.labels.map(function(label, i) {
-                                        const meta = chart.getDatasetMeta(0);
-                                        const style = meta.controller.getStyle(i);
-                                        // Shorten label if too long
-                                        let shortLabel = label;
-                                        if (label.length > 20) {
-                                            shortLabel = label.substring(0,17) + '...';
-                                        }
-
-                                        return {
-                                            text: shortLabel,
-                                            fillStyle: style.backgroundColor,
-                                            strokeStyle: style.borderColor,
-                                            lineWidth: style.borderWidth,
-                                            hidden: isNaN(data.datasets[0].data[i]) || meta.data[i].hidden,
-                                            index: i
-                                        };
-                                    });
-                                }
-                                return [];
-                            }
-                        }
+                            color: '#E5E7EB' // Legend text color
+                        },
+                        position: 'right'
                     }
                 }
             }
         });
 
-        // Gemini API Integration for Conseiller Financier Virtuel
+
+        // AI Conseiller Financier Virtuel
+        const apiKey = "AIzaSyA3a0NuQoiA1FLH7hU1eSM-2G7wp5HUHuA"; // Your API Key
         const askGeminiBtn = document.getElementById('ask-gemini-btn');
         const financeQuestionInput = document.getElementById('finance-question');
-        const loadingIndicator = document.getElementById('loading-indicator');
         const geminiResponseDiv = document.getElementById('gemini-response');
+        const loadingIndicator = document.getElementById('loading-indicator');
 
         askGeminiBtn.addEventListener('click', async () => {
-            const prompt = financeQuestionInput.value.trim();
-            if (!prompt) {
-                geminiResponseDiv.innerHTML = '<p class="text-red-400">Veuillez poser une question.</p>';
+            const question = financeQuestionInput.value.trim();
+            if (!question) {
                 geminiResponseDiv.classList.remove('hidden');
+                geminiResponseDiv.innerHTML = '<p class="text-red-400">Veuillez poser une question.</p>';
                 return;
             }
 
@@ -735,39 +673,36 @@ douleursContainer.appendChild(div);
             geminiResponseDiv.innerHTML = ''; // Clear previous response
 
             try {
-                let chatHistory = [];
-                chatHistory.push({ role: "user", parts: [{ text: `En tant que conseiller financier pour l'application Faso Cash+, expliquez de manière simple et concise le concept suivant en français, en évitant le jargon technique et en vous concentrant sur son utilité pour un utilisateur en Afrique de l'Ouest : ${prompt}` }] });
-                const payload = { contents: chatHistory };
-                const apiKey = "AIzaSyA3a0NuQoiA1FLH7hU1eSM-2G7wp5HUHuA"; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                const response = await fetch(apiUrl, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: `En tant que conseiller financier virtuel de Faso Cash+, réponds à cette question de manière claire et adaptée au contexte africain, en particulier burkinabé, si pertinent. Si la question est hors de mon domaine financier ou inappropriée, dis que tu ne peux pas y répondre. Question: ${question}` }]
+                        }]
+                    }),
                 });
 
-                const result = await response.json();
-
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    const text = result.candidates[0].content.parts[0].text;
-                    geminiResponseDiv.innerHTML = `<p>${text}</p>`;
-                } else {
-                    geminiResponseDiv.innerHTML = '<p class="text-red-400">Désolé, je n\'ai pas pu obtenir de réponse. Veuillez réessayer.</p>';
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Erreur API: ${response.status} - ${errorData.error ? errorData.error.message : 'Une erreur inconnue est survenue.'}`);
                 }
+
+                const data = await response.json();
+                const textResponse = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : 'Pas de réponse de l\'IA.';
+                
+                geminiResponseDiv.classList.remove('hidden');
+                geminiResponseDiv.innerHTML = `<p>${textResponse}</p>`;
+
             } catch (error) {
-                console.error('Erreur lors de l\'appel à l\'API Gemini:', error);
-                geminiResponseDiv.innerHTML = '<p class="text-red-400">Une erreur est survenue lors de la communication avec le conseiller. Veuillez vérifier votre connexion ou réessayer plus tard.</p>';
+                console.error('Erreur lors de l\'appel à Gemini:', error);
+                geminiResponseDiv.classList.remove('hidden');
+                geminiResponseDiv.innerHTML = `<p class="text-red-400">Désolé, une erreur est survenue lors de la communication avec le conseiller. (${error.message})</p>`;
             } finally {
                 loadingIndicator.style.display = 'none'; // Hide spinner
-                geminiResponseDiv.classList.remove('hidden'); // Show response area
             }
         });
-    </script>
-</body>
-</html>
-```
 
 

@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faso Cash+ : La Finance Réinventée</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1A1A1A; /* Darkest background inspired by PDF */
+            color: #E5E7EB; /* gray-200 for readability on dark */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* max-w-2xl */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Default height, can be responsive */
+            max-height: 400px;
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s ease, transform 0.3s ease;
+            padding: 0.5rem 0.75rem; /* Slightly more padding */
+            border-radius: 0.5rem;
+        }
+        .nav-link:hover {
+            color: #FBBF24; /* amber-400 */
+            background-color: rgba(52, 211, 153, 0.1); /* Subtle emerald hover background */
+            transform: scale(1.02); /* Less aggressive scale */
+        }
+        .section-title {
+            color: #34D399; /* emerald-400 for dark background */
+        }
+        .accent-text {
+            color: #FBBF24; /* amber-400 */
+        }
+        .subtle-bg {
+            background-color: #282828; /* Slightly lighter dark for cards/sections */
+        }
+        .subtle-bg-alt {
+            background-color: #2C2C2C; /* Another slightly lighter dark for alternating sections */
+        }
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.875rem;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+        .tooltip-trigger:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1A1A1A; /* Dark background */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4B5563; /* gray-600 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6B7280; /* gray-500 */
+        }
+
+        /* Hero Section Background Image Styling */
+        #accueil {
+            background-image: url('hero-background.png'); /* IMPORTANT: Assurez-vous que ce chemin est correct */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative; /* Needed for overlay positioning */
+        }
+        #accueil::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6); /* Slightly more opaque overlay for text readability */
+            z-index: 1;
+        }
+        #accueil .container {
+            position: relative;
+            z-index: 2; /* Ensure content is above the overlay */
+        }
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #34D399; /* emerald-400 */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: none; /* Hidden by default */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="bg-[#202020] shadow-xl fixed w-full z-50 py-3 border-b border-gray-700">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="text-2xl font-extrabold text-white tracking-tight">Faso<span class="text-amber-400">Cash+</span></a>
+            <div class="hidden md:flex space-x-2"> <a href="#accueil" class="nav-link text-gray-200 text-xs font-medium">Accueil</a> <a href="#probleme" class="nav-link text-gray-200 text-xs font-medium">Le Problème</a>
+                <a href="#solution" class="nav-link text-gray-200 text-xs font-medium">Notre Solution</a>
+                <a href="#modele" class="nav-link text-gray-200 text-xs font-medium">Modèle Éco.</a>
+                <a href="#impact" class="nav-link text-gray-200 text-xs font-medium">Impact Social</a>
+                <a href="#projections" class="nav-link text-gray-200 text-xs font-medium">Projections</a>
+                <a href="#avantages" class="nav-link text-gray-200 text-xs font-medium">Avantages</a>
+                <a href="#equipe" class="nav-link text-gray-200 text-xs font-medium">L'Équipe</a>
+                <a href="#conseiller-virtuel" class="nav-link text-gray-200 text-xs font-medium">Conseiller ✨</a>
+                <a href="#investissement" class="nav-link text-gray-200 text-xs font-medium">Investir</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-200 focus:outline-none p-2 rounded-md hover:bg-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-[#202020] shadow-lg">
+            <a href="#accueil" class="block py-2 px-6 text-sm text-gray-200 hover:bg-emerald-900 border-b border-gray-700">Accueil</a>
+            <a href="#probleme" class="block py-2 px-6 text-sm text-gray-200 hover:bg-emerald-900 border-b border-gray-700">Le Problème</a>
+            <a href="#solution" class="block py-2 px-6 text-sm text-gray-200 hover:bg-emerald-900 border-b border-gray-700">Notre Solution</a>
+            <a href="#modele" class="block py-2 px-6 text-sm text-gray-200 hover:bg-emerald-900 border-b border-gray-700">Modèle Éco.</a>
+            <a href="#impact" class="block py-2 px-6 text-sm text-gray-200 hover:bg-emerald-900 border-b border-gray-700">Impact Social</a>
+            <a href="#projections" class="block py-2 px-6 text-sm text-gray-200 hover:bg-emerald-900 border-b border-gray-700">Projections</a>
+            <a href="#avantages" class="block py-2 px-6 text-sm text-gray-200 hover:bg-emerald-900 border-b border-gray-700">Avantages</a>
+            <a href="#equipe" class="block py-2 px-6 text-sm text-gray-200 hover:bg-emerald-900 border-b border-gray-700">L'Équipe</a>
+            <a href="#conseiller-virtuel" class="block py-2 px-6 text-sm text-gray-200 hover:bg-emerald-900 border-b border-gray-700">Conseiller ✨</a>
+            <a href="#investissement" class="block py-2 px-6 text-sm text-gray-200 hover:bg-emerald-900">Investir</a>
+        </div>
+    </nav>
+
+    <section id="accueil" class="pt-20 min-h-screen flex items-center justify-center">
+        <div class="container mx-auto px-6 py-16 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight">Faso<span class="text-amber-400">Cash+</span></h1>
+            <p class="text-xl md:text-2xl text-gray-100 mb-8 max-w-3xl mx-auto leading-relaxed">La Finance Réinventée pour les Africains, par des Africains.<br>L'Espoir Financier Qui Éveille les Rêves.</p>
+            <p class="text-lg text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Imaginez une application qui transforme chaque téléphone en un coffre-fort numérique, une banque de poche, et un accès direct à des produits essentiels par l'achat à crédit.
+            </p>
+            <a href="#probleme" class="bg-amber-400 hover:bg-amber-500 text-white font-bold py-3 px-8 rounded-xl text-lg transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">Découvrir la Révolution</a>
+        </div>
+    </section>
+
+    <section id="probleme" class="py-20 bg-[#1A1A1A]">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-12">Le Défi Incontournable : Une Réalité à Transformer</h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <p class="text-lg text-gray-200 mb-4 leading-relaxed">
+                        Dans un continent en pleine mutation, le système financier reste fermé pour des millions. Au Burkina Faso, des milliers de jeunes, commerçants, et familles luttent pour épargner ou acquérir des biens essentiels.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-200 space-y-3 mb-6">
+                        <li><span class="font-bold">80%</span> des transactions financières en Afrique de l’Ouest passent par Mobile Money.</li>
+                        <li>Moins de <span class="font-bold">20%</span> des utilisateurs ont un compte bancaire.</li>
+                        <li>Plus de <span class="font-bold">10 millions d'adultes</span> non-bancarisés ou sous-bancarisés au Burkina Faso.</li>
+                    </ul>
+                    <p class="text-lg text-gray-200 leading-relaxed">
+                        Les banques sont trop rigides, les tontines non sécurisées. L'ambition est là, mais les outils manquent.
+                    </p>
+                </div>
+                <div class="p-8 rounded-xl subtle-bg shadow-xl border border-gray-700">
+                    <h3 class="text-xl font-semibold text-emerald-400 mb-6">Les Vraies Douleurs Adressées :</h3>
+                    <div id="douleurs-container" class="space-y-4">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="solution" class="py-20 subtle-bg-alt">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-12">Notre Solution : Faso Cash+ - Le Catalyseur de Projets</h2>
+            <p class="text-center text-lg text-gray-200 mb-10 max-w-3xl mx-auto leading-relaxed">
+                Faso Cash+ est une révolution financière accessible qui donne à chacun le pouvoir de construire son avenir.
+            </p>
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="p-8 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="text-2xl font-semibold text-emerald-400 mb-4">🏦 Épargne Intelligente et Sécurisée</h3>
+                    <p class="text-gray-200 mb-3 leading-relaxed">Via des "coffres" personnalisés pour atteindre vos objectifs (études, commerce, logement...).</p>
+                    <ul class="list-disc list-inside text-gray-400 space-y-2">
+                        <li>Définir des objectifs clairs et suivre la progression.</li>
+                        <li>Options de blocage pour renforcer la discipline.</li>
+                        <li>Fonds gérés en sécurité via notre partenaire bancaire.</li>
+                    </ul>
+                </div>
+                <div class="p-8 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="text-2xl font-semibold text-emerald-400 mb-4">🛒 Marketplace "Achat à Crédit"</h3>
+                    <p class="text-gray-200 mb-3 leading-relaxed">Accédez à une multitude de produits (électronique, équipement, etc.) en versant un acompte.</p>
+                    <ul class="list-disc list-inside text-gray-400 space-y-2">
+                        <li>Paiements progressifs via Mobile Money.</li>
+                        <li>Livraison sécurisée après solde total.</li>
+                        <li>Rend l'acquisition de biens essentiels abordable.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center mb-12 p-8 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                <h3 class="text-xl font-semibold text-emerald-400 mb-6">Intégration et Fonctionnalités Clés (V1 & V2)</h3>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <span class="bg-emerald-900 text-emerald-200 px-5 py-2 rounded-full text-base font-medium shadow-md">📱 Mobile Money (Moov, Orange, Telecel)</span>
+                    <span class="bg-sky-900 text-sky-200 px-5 py-2 rounded-full text-base font-medium shadow-md">💳 Carte Bancaire (Diaspora)</span>
+                    <span class="bg-emerald-900 text-emerald-200 px-5 py-2 rounded-full text-base font-medium shadow-md">🤖 Scoring Intelligent (Éligibilité)</span>
+                    <span class="bg-sky-900 text-sky-200 px-5 py-2 rounded-full text-base font-medium shadow-md">📚 Éducation Financière (Mini-cours)</span>
+                    <span class="bg-emerald-900 text-emerald-200 px-5 py-2 rounded-full text-base font-medium shadow-md">📊 Tableau de Bord Clair</span>
+                </div>
+            </div>
+            <div class="p-8 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                <h3 class="text-xl font-semibold text-center text-emerald-400 mb-6">Feuille de Route Ambitieuse : Au-delà de V2</h3>
+                <div class="grid md:grid-cols-2 gap-6 text-center">
+                    <div class="p-5 border border-sky-800 rounded-lg bg-gray-900 shadow-inner">
+                        <h4 class="font-semibold text-sky-400 text-lg mb-2">Version 3.0</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">Accès au Crédit Direct (personnel), Financement des Marchés (entreprises).</p>
+                    </div>
+                    <div class="p-5 border border-sky-800 rounded-lg bg-gray-900 shadow-inner">
+                        <h4 class="font-semibold text-sky-400 text-lg mb-2">Version 4.0</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">Capital pour Commerçants, Bourse d'Épargne en ligne, Expansion Régionale.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="modele" class="py-20 bg-[#1A1A1A]">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-12">Notre Modèle Économique : Un Cercle Vertueux de Valeur</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-8 rounded-xl subtle-bg shadow-xl border border-gray-700 text-center">
+                    <div class="text-5xl mb-4 text-amber-400">💰</div>
+                    <h3 class="text-xl font-semibold text-emerald-400 mb-2">Revenus de l'Épargne</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Commission de <span class="font-bold">2%</span> sur le volume d'épargne géré via notre partenaire bancaire.</p>
+                </div>
+                <div class="p-8 rounded-xl subtle-bg shadow-xl border border-gray-700 text-center">
+                    <div class="text-5xl mb-4 text-amber-400">🛍️</div>
+                    <h3 class="text-xl font-semibold text-emerald-400 mb-2">Commissions "Achat à Crédit"</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Environ <span class="font-bold">5%</span> sur la valeur des produits vendus via notre Marketplace.</p>
+                </div>
+                <div class="p-8 rounded-xl subtle-bg shadow-xl border border-gray-700 text-center">
+                    <div class="text-5xl mb-4 text-amber-400">⚙️</div>
+                    <h3 class="text-xl font-semibold text-emerald-400 mb-2">Frais de Gestion des Coffres</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed"><span class="font-bold">150 FCFA/mois</span> par coffret actif. Abordable et récurrent.</p>
+                </div>
+                <div class="p-8 rounded-xl subtle-bg shadow-xl border border-gray-700 text-center md:col-span-2 lg:col-span-3 lg:w-1/3 lg:mx-auto">
+                     <div class="text-5xl mb-4 text-amber-400">🤝</div>
+                    <h3 class="text-xl font-semibold text-emerald-400 mb-2">Partenariats & Services Premium</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Collaborations avec commerçants, banques, fintechs, assureurs. Potentiel pour services additionnels.</p>
+                </div>
+            </div>
+             <p class="text-center text-lg text-gray-200 mt-10 leading-relaxed">
+                Un modèle équitable pour l'utilisateur, performant pour Faso Cash+, assurant une rentabilité rapide.
+            </p>
+        </div>
+    </section>
+
+    <section id="impact" class="py-20 subtle-bg-alt">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-12">Notre Impact Social : Transformer des Vies, Bâtir l'Avenir</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="font-semibold text-emerald-400 text-lg mb-2">🌍 Inclusion Financière</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Accès aux services pour les non-bancarisés, création d'historique financier.</p>
+                </div>
+                <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="font-semibold text-emerald-400 text-lg mb-2">💪 Autonomisation Économique</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Soutien aux jeunes, femmes, petits commerçants pour réaliser leurs projets.</p>
+                </div>
+                <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="font-semibold text-emerald-400 text-lg mb-2">🎓 Éducation Financière</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Campagne de sensibilisation, mini-cours pour des décisions éclairées.</p>
+                </div>
+                <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="font-semibold text-emerald-400 text-lg mb-2">🌱 Contribution aux ODD</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Réduction pauvreté (ODD1), Éducation (ODD4), Égalité (ODD5), Croissance (ODD8).</p>
+                </div>
+                 <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="font-semibold text-emerald-400 text-lg mb-2">💼 Création d'Emplois</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Emplois directs et soutien à l'écosystème des commerçants locaux.</p>
+                </div>
+                 <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="font-semibold text-emerald-400 text-lg mb-2">🤝 Confiance et Communauté</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Bâtir des relations durables et une culture de l'épargne.</p>
+                </div>
+            </div>
+            <p class="text-center text-lg text-gray-200 mt-10 leading-relaxed">
+                Faso Cash+ : Un investissement à fort impact social et économique pour l'Afrique !
+            </p>
+        </div>
+    </section>
+
+    <section id="projections" class="py-20 bg-[#1A1A1A]">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-4">Nos Objectifs (Année 1) : La Preuve en Chiffres</h2>
+            <p class="text-center text-gray-400 mb-10 leading-relaxed">Avec un budget marketing de 30M FCFA et un investissement de 120M FCFA.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <div class="p-6 rounded-xl subtle-bg shadow-xl border border-gray-700 text-center">
+                    <h3 class="text-xl font-semibold text-emerald-400 mb-2">Utilisateurs Actifs</h3>
+                    <p class="text-3xl font-bold accent-text">100k - 200k</p>
+                </div>
+                <div class="p-6 rounded-xl subtle-bg shadow-xl border border-gray-700 text-center">
+                    <h3 class="text-xl font-semibold text-emerald-400 mb-2">Volume d'Épargne</h3>
+                    <p class="text-3xl font-bold accent-text">0.5 - 1 Md FCFA</p>
+                </div>
+                <div class="p-6 rounded-xl subtle-bg shadow-xl border border-gray-700 text-center">
+                    <h3 class="text-xl font-semibold text-emerald-400 mb-2">Ventes "Achat à Crédit"</h3>
+                    <p class="text-3xl font-bold accent-text">300M - 800M FCFA</p>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="chart-container p-4 border border-gray-700 rounded-xl shadow-md">
+                    <canvas id="revenueProfitChart"></canvas>
+                </div>
+                <div class="chart-container p-4 border border-gray-700 rounded-xl shadow-md">
+                    <canvas id="userGrowthChart"></canvas>
+                </div>
+            </div>
+             <p class="text-center text-lg font-semibold text-emerald-400 mt-10 leading-relaxed">
+                Bénéfice Net Projeté (Année 1) : <span class="accent-text">128M - 148M FCFA</span>
+            </p>
+        </div>
+    </section>
+
+    <section id="avantages" class="py-20 subtle-bg-alt">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-12">Nos Avantages Compétitifs : Pourquoi Faso Cash+ est Unique</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="font-semibold text-emerald-400 text-lg mb-2">1. Solution Intégrée Complète</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Épargne Intelligente + Marketplace "Achat à Crédit".</p>
+                </div>
+                <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="font-semibold text-emerald-400 text-lg mb-2">2. Hyper-Intégration Mobile Money</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">S'appuie sur <span class="font-bold">80%</span> d'adoption MM, accessible aux non-bancarisés.</p>
+                </div>
+                <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="font-semibold text-emerald-400 text-lg mb-2">3. Confiance par l'Éducation</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Campagne de sensibilisation massive, scoring intelligent adapté.</p>
+                </div>
+                <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="font-semibold text-emerald-400 text-lg mb-2">4. "Par l'Africain, Pour l'Africain"</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Compréhension locale profonde, vision panafricaine.</p>
+                </div>
+                <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="font-semibold text-emerald-400 text-lg mb-2">5. Modèle Économique Équitable</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Frais bas pour l'utilisateur, monétisation intelligente.</p>
+                </div>
+                <div class="p-6 bg-[#282828] rounded-xl shadow-xl border border-gray-700">
+                    <h3 class="font-semibold text-emerald-400 text-lg mb-2">6. Feuille de Route Ambitieuse</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Agilité, évolution vers crédit direct (V3/V4) et B2B.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="equipe" class="py-20 bg-[#1A1A1A]">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold section-title mb-8">L'Équipe : Les Bâtisseurs de Faso Cash+</h2>
+            <p class="text-lg text-gray-200 max-w-2xl mx-auto mb-6 leading-relaxed">
+                Faso Cash+ est portée par une équipe fondatrice passionnée, visionnaire et dotée d'une combinaison unique d'expertises en technologie, finance, et marketing, avec une connaissance approfondie du marché africain.
+            </p>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="p-6 subtle-bg rounded-xl shadow-xl border border-gray-700">
+                    <img src="images/dicko-ismael.jpg" alt="Photo de Dicko Ismael Boubacar" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover" onerror="this.src='https://placehold.co/120x120/CCCCCC/FFFFFF?text=Photo'; this.onerror=null;">
+                    <h3 class="text-xl font-semibold text-emerald-400 mb-1">Dicko Ismael Boubacar</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Fondateur, Développeur d’application mobile et Web, Ingénieur en système d’information</p>
+                </div>
+                <div class="p-6 subtle-bg rounded-xl shadow-xl border border-gray-700">
+                    <img src="images/dicko-boubacar.jpg" alt="Photo de Dicko Boubacar" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover" onerror="this.src='https://placehold.co/120x120/CCCCCC/FFFFFF?text=Photo'; this.onerror=null;">
+                    <h3 class="text-xl font-semibold text-emerald-400 mb-1">Dicko Boubacar</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">DRH projet Banque Mondiale, Comptabilité et Management</p>
+                </div>
+                <div class="p-6 subtle-bg rounded-xl shadow-xl border border-gray-700">
+                    <img src="images/ouedraogo-willy.jpg" alt="Photo de Ouedraogo Willy" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover" onerror="this.src='https://placehold.co/120x120/CCCCCC/FFFFFF?text=Photo'; this.onerror=null;">
+                    <h3 class="text-xl font-semibold text-emerald-400 mb-1">Ouedraogo Willy</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Développeur d’application web et mobile, Sécurité informatique</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="conseiller-virtuel" class="py-20 subtle-bg-alt">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-8">Votre Conseiller Financier Virtuel ✨</h2>
+            <p class="text-center text-lg text-gray-200 mb-10 max-w-3xl mx-auto leading-relaxed">
+                Posez vos questions sur l'épargne, le crédit, le budget ou l'investissement, et obtenez des explications claires et personnalisées grâce à l'intelligence artificielle.
+            </p>
+            <div class="max-w-xl mx-auto p-8 rounded-xl subtle-bg shadow-xl border border-gray-700">
+                <textarea id="finance-question" rows="4" class="w-full p-4 rounded-lg bg-gray-800 text-gray-200 border border-gray-600 focus:outline-none focus:border-emerald-400 mb-4" placeholder="Ex: C'est quoi l'inflation et comment ça m'affecte ?"></textarea>
+                <button id="ask-gemini-btn" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-xl text-lg transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center">
+                    Demander au Conseiller ✨
+                </button>
+                <div id="loading-indicator" class="loading-spinner mx-auto mt-6"></div>
+                <div id="gemini-response" class="mt-8 p-6 rounded-xl bg-gray-800 border border-gray-700 text-gray-200 leading-relaxed hidden">
+                    </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="investissement" class="py-20 bg-[#1A1A1A]">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold section-title mb-8">Appel à l'Investissement : Bâtissez l'Avenir avec Faso Cash+</h2>
+            <p class="text-xl text-gray-200 mb-6 leading-relaxed">Une opportunité unique : Marché immense, Modèle robuste, Impact fort, Vision panafricaine.</p>
+            <p class="text-3xl font-bold accent-text mb-8">Notre Demande : <span class="font-bold">120 000 000 FCFA</span></p>
+
+            <div class="max-w-3xl mx-auto mb-10">
+                 <h3 class="text-xl font-semibold text-emerald-400 mb-4">Utilisation des Fonds :</h3>
+                <div class="chart-container h-64 md:h-80"> <canvas id="fundsChart"></canvas>
+                </div>
+            </div>
+
+            <a href="mailto:sultandicko@gmail.com?subject=Investissement Faso Cash+" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 px-10 rounded-xl text-xl transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                Investissez Maintenant et Rejoignez l'Aventure !
+            </a>
+            <p class="mt-6 text-gray-400">Contact : sultandicko@gmail.com | +226 76 19 67 26</p>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-white py-8 text-center">
+        <div class="container mx-auto px-6">
+            <p>&copy; 2025 Faso Cash+. Tous droits réservés.</p>
+            <p class="text-sm text-gray-500 mt-2">La Finance Réinventée pour les Africains, par des Africains.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                mobileMenu.classList.add('hidden'); // Close mobile menu on link click
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Calculate offset for fixed navbar
+                    const navbarHeight = document.querySelector('nav').offsetHeight;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // "Vraies douleurs" data and rendering
+        const douleursData = [
+            { icon: '🎓', text: 'L’étudiant qui rêve d’un ordinateur mais n’a ni carte bancaire, ni accès au crédit traditionnel.' },
+            { icon: '🧺', text: 'Le commerçant qui rate une bonne affaire (achat de stock, équipement) faute de trésorerie disponible.' },
+            { icon: '🌍', text: 'Le Burkinabè de la diaspora qui veut investir chez lui ou offrir des produits à sa famille, mais ne trouve aucune solution fiable.' },
+            { icon: '🔒', text: 'Tous ceux qui veulent épargner… mais finissent par tout retirer sans discipline.' }
+        ];
+
+        const douleursContainer = document.getElementById('douleurs-container');
+        douleursData.forEach(douleur => {
+            const div = document.createElement('div');
+            div.className = 'flex items-start p-3 bg-gray-800 rounded-md shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer tooltip-trigger';
+            div.innerHTML = `
+                <span class="text-2xl mr-3">${douleur.icon}</span>
+                <p class="text-gray-200 text-sm">${douleur.text}</p>
+                <span class="tooltip">Cliquez pour en savoir plus (fonctionnalité future)</span>
+            `;
+            // Basic interaction example: log to console on click
+            div.addEventListener('click', () => {
+                console.log('Clicked on douleur:', douleur.text);
+                // For now, a simple message box
+                const messageBox = document.createElement('div');
+                messageBox.style.position = 'fixed';
+                messageBox.style.top = '50%';
+                messageBox.style.left = '50%';
+                messageBox.style.transform = 'translate(-50%, -50%)';
+                messageBox.style.backgroundColor = '#282828';
+                messageBox.style.color = '#E5E7EB';
+                messageBox.style.padding = '20px';
+                messageBox.style.border = '1px solid #4B5563';
+                messageBox.style.borderRadius = '8px';
+                messageBox.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)';
+                messageBox.style.zIndex = '1000';
+                messageBox.innerHTML = `<p class="text-gray-200">${douleur.text}</p><button onclick="this.parentElement.remove()" class="mt-4 bg-amber-400 text-white px-3 py-1 rounded-md hover:bg-amber-500">Fermer</button>`;
+                document.body.appendChild(messageBox);
+            });
+            douleursContainer.appendChild(div);
+        });
+
+        // Charts Initialization
+        // Revenue & Profit Chart
+        const ctxRevenueProfit = document.getElementById('revenueProfitChart').getContext('2d');
+        new Chart(ctxRevenueProfit, {
+            type: 'bar',
+            data: {
+                labels: ['Revenus Projetés', 'Bénéfice Net Projeté'],
+                datasets: [{
+                    label: 'Montant (FCFA)',
+                    data: [800000000, 140000000], // Example data: 800M Revenue, 140M Profit
+                    backgroundColor: ['#34D399', '#FBBF24'], // emerald-400, amber-400
+                    borderColor: ['#10B981', '#F59E0B'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Projections Financières Année 1',
+                        color: '#E5E7EB', // Text color
+                        font: { size: 16 }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#9CA3AF', // Gray text for ticks
+                            callback: function(value) {
+                                return value / 1000000 + 'M FCFA'; // Format as millions
+                            }
+                        },
+                        grid: {
+                            color: '#374151', // Darker grid lines
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#9CA3AF' // Gray text for ticks
+                        },
+                        grid: {
+                            color: '#374151',
+                            drawBorder: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // User Growth Chart
+        const ctxUserGrowth = document.getElementById('userGrowthChart').getContext('2d');
+        new Chart(ctxUserGrowth, {
+            type: 'line',
+            data: {
+                labels: ['Mois 1', 'Mois 3', 'Mois 6', 'Mois 9', 'Mois 12'],
+                datasets: [{
+                    label: 'Utilisateurs Actifs',
+                    data: [10000, 50000, 100000, 150000, 200000], // Example data
+                    borderColor: '#FBBF24', // amber-400
+                    backgroundColor: 'rgba(251, 191, 36, 0.2)', // Light amber fill
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Croissance des Utilisateurs (Année 1)',
+                        color: '#E5E7EB',
+                        font: { size: 16 }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#9CA3AF',
+                            callback: function(value) {
+                                return value / 1000 + 'K'; // Format as thousands
+                            }
+                        },
+                        grid: {
+                            color: '#374151',
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#9CA3AF'
+                        },
+                        grid: {
+                            color: '#374151',
+                            drawBorder: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Funds Allocation Chart
+        const ctxFunds = document.getElementById('fundsChart').getContext('2d');
+        new Chart(ctxFunds, {
+            type: 'doughnut',
+            data: {
+                labels: ['Développement Tech', 'Acquisition & Marketing', 'Opérations & Support', 'Structure & Imprévus', 'Fonds de Roulement'],
+                datasets: [{
+                    data: [35, 30, 15, 21, 24], // Data in millions FCFA
+                    backgroundColor: ['#34D399', '#FBBF24', '#EF4444', '#60A5FA', '#A78BFA'], // emerald, amber, red, blue, violet
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Utilisation des Fonds Demandés (120M FCFA)',
+                        color: '#E5E7EB',
+                        font: { size: 16 }
+                    },
+                    legend: {
+                        labels: {
+                            color: '#E5E7EB' // Legend text color
+                        },
+                        position: 'right'
+                    }
+                }
+            }
+        });
+
+
+        // AI Conseiller Financier Virtuel
+        const apiKey = "AIzaSyA3a0NuQoiA1FLH7hU1eSM-2G7wp5HUHuA"; // Your API Key
+        const askGeminiBtn = document.getElementById('ask-gemini-btn');
+        const financeQuestionInput = document.getElementById('finance-question');
+        const geminiResponseDiv = document.getElementById('gemini-response');
+        const loadingIndicator = document.getElementById('loading-indicator');
+
+        askGeminiBtn.addEventListener('click', async () => {
+            const question = financeQuestionInput.value.trim();
+            if (!question) {
+                geminiResponseDiv.classList.remove('hidden');
+                geminiResponseDiv.innerHTML = '<p class="text-red-400">Veuillez poser une question.</p>';
+                return;
+            }
+
+            loadingIndicator.style.display = 'block'; // Show spinner
+            geminiResponseDiv.classList.add('hidden'); // Hide previous response
+            geminiResponseDiv.innerHTML = ''; // Clear previous response
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: `En tant que conseiller financier virtuel de Faso Cash+, réponds à cette question de manière claire et adaptée au contexte africain, en particulier burkinabé, si pertinent. Si la question est hors de mon domaine financier ou inappropriée, dis que tu ne peux pas y répondre. Question: ${question}` }]
+                        }]
+                    }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Erreur API: ${response.status} - ${errorData.error ? errorData.error.message : 'Une erreur inconnue est survenue.'}`);
+                }
+
+                const data = await response.json();
+                const textResponse = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : 'Pas de réponse de l\'IA.';
+                
+                geminiResponseDiv.classList.remove('hidden');
+                geminiResponseDiv.innerHTML = `<p>${textResponse}</p>`;
+
+            } catch (error) {
+                console.error('Erreur lors de l\'appel à Gemini:', error);
+                geminiResponseDiv.classList.remove('hidden');
+                geminiResponseDiv.innerHTML = `<p class="text-red-400">Désolé, une erreur est survenue lors de la communication avec le conseiller. (${error.message})</p>`;
+            } finally {
+                loadingIndicator.style.display = 'none'; // Hide spinner
+            }
+        });
+    </script>
+</body>
+</html>
